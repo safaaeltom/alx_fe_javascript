@@ -128,7 +128,7 @@ function populateCategories() {
     categories.forEach(cat => {
         const option = document.createElement("option");
         option.value = cat;
-        option.innerText = cat;
+        option.textContent = cat;
         categoryFilterSelect.appendChild(option);
     });
 
@@ -153,13 +153,13 @@ function getFilteredQuotes() {
 }
 
 // Called when user changes category
-function filterQuotes() {
+function filterQuote() {
     showRandomQuote();
 }
 
 // Event listener for category dropdown
 if (categoryFilterSelect) {
-    categoryFilterSelect.addEventListener("change", filterQuotes);
+    categoryFilterSelect.addEventListener("change", filterQuote);
 }
 
 
