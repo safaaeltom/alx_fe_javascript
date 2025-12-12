@@ -38,3 +38,29 @@ function addQuote() {
     textInput.value = "";
     categoryInput.value = "";
 }
+
+function createAddQuoteForm() {
+    const container = document.createElement("div");
+
+    const textInput = document.createElement("input");
+    textInput.id = "newQuoteText";
+    textInput.type = "text";
+    textInput.placeholder = "Enter a new quote";
+
+    const categoryInput = document.createElement("input");
+    categoryInput.id = "newQuoteCategory";
+    categoryInput.type = "text";
+    categoryInput.placeholder = "Enter quote category";
+
+    const addButton = document.createElement("button");
+    addButton.innerText = "Add Quote";
+    addButton.addEventListener("click", addQuote);
+
+    container.appendChild(textInput);
+    container.appendChild(categoryInput);
+    container.appendChild(addButton);
+
+    document.body.appendChild(container);
+}
+
+createAddQuoteForm();
