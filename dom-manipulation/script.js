@@ -34,7 +34,7 @@ function addQuote() {
         category: newCategory
     });
 
-    quoteDisplay.innerText = `"${newText}" — ${newCategory}`;
+    quoteDisplay.innerHTML = newText + " — " + newCategory;
     textInput.value = "";
     categoryInput.value = "";
 }
