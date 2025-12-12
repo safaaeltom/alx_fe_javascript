@@ -8,12 +8,12 @@ const quoteDisplay = document.getElementById("quoteDisplay");
 const newQuoteButton = document.getElementById("newQuote");  
 
 
-function displayRandomQuote() {
-    let index = Math.floor(Math.random() * quotes.length);
-    let quote = quotes[index];
-    quoteDisplay.innerText = `"${quote.text}" — ${quote.category}`;
+function showRandomQuote() {
+    const randomIndex = Math.floor(Math.random() * quotes.length);
+    const randomQuote = quotes[randomIndex];
+    quoteDisplay.innerHTML = randomQuote.text + " - " + randomQuote.category;
 }
-newQuoteButton.addEventListener("click", displayRandomQuote);
+newQuoteButton.addEventListener("click", showRandomQuote);
 
 
 function addQuote() {
