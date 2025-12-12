@@ -1,19 +1,19 @@
 let quotes = [
-{text: "La vie est belle.", category: "Inspiration"}, 
-{text: "Love yourself.", category: "Motivation"}, 
-{text: "Work hard play harder.", category: "Success"}
+{ text: "La vie est belle.", category: "Inspiration" }, 
+{ text: "Love yourself.", category: "Motivation" }, 
+{ text: "Work hard play harder.", category: "Success" }
 ];
 
 const quoteDisplay = document.getElementById("quoteDisplay"); 
 const newQuoteButton = document.getElementById("newQuote");  
 
 
-function showRandomQuote() {
-    let randomIndex = Math.floor(Math.random() * quotes.length);
-    let randomQuote = quotes[randomIndex];
-    quoteDisplay.innerText = `"${randomQuote.text}" — ${randomQuote.category}`;
+function displayRandomQuote() {
+    let index = Math.floor(Math.random() * quotes.length);
+    let quote = quotes[index];
+    quoteDisplay.innerText = `"${quote.text}" — ${quote.category}`;
 }
-newQuoteButton.onclick = showRandomQuote;
+newQuoteButton.addEventListener("click", displayRandomQuote);
 
 
 function addQuote() {
@@ -25,7 +25,7 @@ function addQuote() {
     const newCategory = categoryInput.value.trim();
 
     if (newText === "" || newCategory === "") {
-        alert("Please enter both a quote and a category.");
+        alert("Please enter a quote and a category.");
         return;
     }
 
