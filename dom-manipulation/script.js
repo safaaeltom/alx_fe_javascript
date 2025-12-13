@@ -244,6 +244,10 @@ function syncQuotes() {
             console.error("Sync failed:", error);
         });
 }
+/* Required*/
+function fetchQuotesFromServer() {
+    syncQuotes();
+}
 
 /* Periodic server sync (every 30 seconds) */
-setInterval(syncQuotes, 30000);
+setInterval(fetchQuotesFromServer, 30000);
