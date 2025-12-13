@@ -168,13 +168,13 @@ populateCategories();
 loadLastQuote();      
 createAddQuoteForm();
 
-/* =============
-   SERVER SYNC 
-   ============= */
+/* ===============================
+   SERVER SYNC (ASYNC/AWAIT + ALL)
+   =============================== */
 
 const SERVER_API_URL = "https://jsonplaceholder.typicode.com/posts";
 
-/* Notification helper */
+/* UI notification */
 function showSyncMessage(message) {
     let notification = document.getElementById("syncNotification");
 
@@ -191,62 +191,58 @@ function showSyncMessage(message) {
     }, 3000);
 }
 
-/* Post local quotes to server (simulation) */
-function postQuotesToServer() {
-    fetch(SERVER_API_URL, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(quotes)
-    })
-    .then(response => response.json())
-    .then(() => {
-        showSyncMessage("Local quotes sent to server.");
-    })
-    .catch(error => {
-        console.error("Posting failed:", error);
-    });
-}
-
-/* Fetch quotes from server and sync (SERVER WINS) */
-function syncQuotes() {
-    fetch(SERVER_API_URL)
-        .then(response => response.json())
-        .then(serverData => {
-
-            // Convert mock server data to quote format
-            const serverQuotes = serverData.slice(0, 5).map(item => ({
-                text: item.title,
-                category: "Server"
-            }));
-
-            let updated = false;
-
-            serverQuotes.forEach(serverQuote => {
-                const exists = quotes.some(
-                    localQuote => localQuote.text === serverQuote.text
-                );
-
-                if (!exists) {
-                    quotes.push(serverQuote);
-                    updated = true;
-                }
-            });
-
-            if (updated) {
-                saveQuotes();
-                populateCategories();
-                showSyncMessage("Quotes synced from server.");
-            }
-        })
-        .catch(error => {
-            console.error("Sync failed:", error);
+/* POST local quotes to server (async/await) */
+async function postQuotesToServer() {
+    try {
+        const response = await fetch(SERVER_API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(quotes)
         });
+        await response.json();
+        showSyncMessage("Local quotes sent to server.");
+    } catch (error) {
+        console.error("POST failed:", error);
+    }
 }
-/* Required*/
-function fetchQuotesFromServer() {
-    syncQuotes();
+
+/* Sync logic (server wins, async/await) */
+async function syncQuotes() {
+    try {
+        const response = await fetch(SERVER_API_URL);
+        const serverData = await response.json();
+
+        const serverQuotes = serverData.slice(0, 5).map(item => ({
+            text: item.title,
+            category: "Server"
+        }));
+
+        let updated = false;
+
+        serverQuotes.forEach(serverQuote => {
+            const exists = quotes.some(
+                localQuote => localQuote.text === serverQuote.text
+            );
+
+            if (!exists) {
+                quotes.push(serverQuote);
+                updated = true;
+            }
+        });
+
+        if (updated) {
+            saveQuotes();
+            populateCategories();
+            showSyncMessage("Quotes synced from server.");
+        }
+    } catch (error) {
+        console.error("Sync failed:", error);
+    }
+}
+
+/* Required by ALX: fetchQuotesFromServer */
+async function fetchQuotesFromServer() {
+    await syncQuotes();
 }
 
 /* Periodic server sync (every 30 seconds) */
