@@ -233,7 +233,7 @@ async function syncQuotes() {
         if (updated) {
             saveQuotes();
             populateCategories();
-            showSyncMessage("Quotes synced from server.");
+            showSyncMessage("Quotes synced with server!");
         }
     } catch (error) {
         console.error("Sync failed:", error);
