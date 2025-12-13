@@ -167,3 +167,71 @@ loadQuotes();
 populateCategories();  
 loadLastQuote();      
 createAddQuoteForm();
+
+/* ===============================
+   SERVER SYNC SIMULATION (ALX)
+================================ */
+
+// Mock server endpoint
+const SERVER_URL = "https://jsonplaceholder.typicode.com/posts";
+
+// Notification area
+const syncNotification = document.getElementById("syncNotification");
+
+// Fetch quotes from "server"
+async function fetchQuotesFromServer() {
+    try {
+        const response = await fetch(SERVER_URL);
+        const serverData = await response.json();
+
+        // Simulate server quotes format
+        const serverQuotes = serverData.slice(0, 5).map(item => ({
+            text: item.title,
+            category: "Server"
+        }));
+
+        resolveConflicts(serverQuotes);
+    } catch (error) {
+        console.error("Server fetch failed", error);
+    }
+}
+
+// Conflict resolution: SERVER TAKES PRECEDENCE
+function resolveConflicts(serverQuotes) {
+    let updated = false;
+
+    serverQuotes.forEach(serverQuote => {
+        const exists = quotes.some(
+            localQuote => localQuote.text === serverQuote.text
+        );
+
+        if (!exists) {
+            quotes.push(serverQuote);
+            updated = true;
+        }
+    });
+
+    if (updated) {
+        saveQuotes();
+        populateCategories();
+        notifyUser("Quotes synced from server.");
+    }
+}
+
+// Manual sync button
+function manualSync() {
+    fetchQuotesFromServer();
+}
+
+// Periodic sync (every 30 seconds)
+setInterval(fetchQuotesFromServer, 30000);
+
+// User notification
+function notifyUser(message) {
+    if (!syncNotification) return;
+    syncNotification.textContent = message;
+
+    setTimeout(() => {
+        syncNotification.textContent = "";
+    }, 3000);
+}
